@@ -2,31 +2,33 @@ import java.util.Scanner;
 
 
 
-    class Blackjack {
+
+// Main class, everything that happends when the game is run is written here.
+class Blackjack {
         {
 
             {
                 Scanner scanner = new Scanner(System.in);
                 Deck deck = new Deck();
                 deck.shuffle();
-                Player player = new Player();
-                Player dealer = new Player();
+                HumanPlayer HumanPlayer = new HumanPlayer();
+                HumanPlayer dealer = new HumanPlayer();
 
                 // Deal the initial cards
-                player.addCard(Deck.Deal());
+                HumanPlayer.addCard(Deck.Deal());
                 dealer.addCard(Deck.Deal());
-                player.addCard(Deck.Deal());
+                HumanPlayer.addCard(Deck.Deal());
                 dealer.addCard(Deck.Deal());
 
                 // Players turn
                 while (true) {
-                    System.out.println("Your hand: " + player.getHand() + " (" + player.getScore() + ")");
+                    System.out.println("Your hand: " + HumanPlayer.getHand() + " (" + HumanPlayer.getScore() + ")");
                     System.out.println("Dealer's hand: " + dealer.getHand().get(0) + " (score hidden)");
                     System.out.print("Hit or stand? ");
                     String input = scanner.nextLine();
                     if (input.equalsIgnoreCase("hit")) {
-                        player.addCard(Deck.Deal());
-                        if (player.getScore() > 21) {
+                        HumanPlayer.addCard(Deck.Deal());
+                        if (HumanPlayer.calculateHandValue() > 21) {
                             System.out.println("Dealer wins.");
                         }
                     } else if (input.equalsIgnoreCase("stand")) {
@@ -37,15 +39,16 @@ import java.util.Scanner;
                 }
 
                 // Dealers turn
-                while (dealer.getScore() < 17) {
+                while (dealer.calculateHandValue() < 17) {
                     dealer.addCard(Deck.Deal());
                 }
-                System.out.println("Your hand: " + player.getHand() + " (" + player.getScore() + ")");
+                // Updates the new hand when dealer gets new card
+                System.out.println("Your hand: " + HumanPlayer.getHand() + " (" + HumanPlayer.getScore() + ")");
                 System.out.println("Dealer's hand: " + dealer.getHand() + " (" + dealer.getScore() + ")");
 
                 // Determine the winner
-                int playerScore = player.getScore();
-                int dealerScore = dealer.getScore();
+                int playerScore = HumanPlayer.calculateHandValue();
+                int dealerScore = dealer.calculateHandValue();
                 if (playerScore > dealerScore & playerScore <= 21 || dealerScore > 21 & playerScore <= 21) {
                     System.out.println("You win!");
                 } else if (playerScore < dealerScore || playerScore > 21 ) {
